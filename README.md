@@ -2,6 +2,8 @@
 
 Coursera Course: https://www.coursera.org/learn/introduction-tensorflow/home/welcome
 
+Deeplearning.ai YouTube: https://www.youtube.com/channel/UCcIXc5mJsHVYTZR1maL5l9w/playlists
+
 Google Colab: https://colab.research.google.com/notebooks/welcome.ipynb
 
 Google Seedbank: https://research.google.com/seedbank/
@@ -9,6 +11,8 @@ Google Seedbank: https://research.google.com/seedbank/
 TensorFlow: https://www.tensorflow.org/
 
 TensorFlow Playground: http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.72727&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false
+
+Convolution Filters: https://lodev.org/cgtutor/filtering.html
 
 ## Neural Networks
 intuition: make multiple guesses, which gradually approaches 100% accuracy (convergence)
@@ -19,7 +23,8 @@ intuition: make multiple guesses, which gradually approaches 100% accuracy (conv
 - simplest neural net has 1 neuron
 
 **epoch:** 1 complete presentation of data set to neural net
-**loss function:** measures accuracy of model during traing
+
+**loss function:** measures accuracy of model during training
 - need to minimize loss function for convergence
 
 **optimizer:** how model is updated based on data and loss function
@@ -38,10 +43,11 @@ model.compile(optimizer='adam',
 **Rule of Thumb:** first layer in your network should be the same shape as your data
 
 **Rule of Thumb:** # of neurons in the last layer should match the number of classes you are classifying for
+- i.e. last layer should match shape/form of desired output data
 
+- deep learning => chaining simple layers
 - layers extract representations from data fed into them
   - each layer req an activation function that instructs them
-- deep learning => chaining simple layers
 - most layers have params that are learned during training
 - neural nets work best with normalized data (betw 0 and 1)
   - w/ python can just divide array
@@ -77,7 +83,7 @@ model.fit(training_images, training_labels, epochs=5, callbacks=[callbacks])
 **Computer vision:** field of teaching computers to understand and label things present in an image
 
 Intuition: feed large dataset of labelled images =>
-computer figures out pattern 
+computer figures out pattern
 
 ```
 # ex. MNIST-fashion: dataset of 10 types of clothing (28x28 images)
@@ -96,6 +102,60 @@ model = keras.Sequential([
 
 https://www.tensorflow.org/tutorials/keras/basic_classification
 
+## Convolutional Neural Network
+Intuition: break image into diff components (ex. I see shoe laces and soles => shoe)
+- some convolutions will change the image s.t. certain features in image are emphasized
+
+- condense image into important features
+  - don't look at each pixel
+- pass filter over image to modify it
+- look at pixel and neighbours
+  - ex. 3x3 filter looks at current pixel and all its neighbours 1 pixel away
+  - multiply all pixels in 3x3 grid by values in filter and then sum (1 convolution)
+
+- ex. layer structure
+
+1. Conv2D
+2. MaxPooling2D
+3. Conv2D
+4. MaxPooling2D
+5. Flatten
+6. Dense  
+7. Dense
+
+- output of convolution is always smaller than input image
+  - Conv2D only looks at full grids (does not operate on edges)
+
+- convolution reduce amt of info => conv net can then extract meaningful info
+- pooling compresses image  
+
+**convolution:** filtering that highlights important features
+- an operation where sum of products of elems from 2 2D functs, where 1 funct moves over every elem of other funct
+- filter matrix must be symmetrical
+  - otherwise it's a correlation, not a convolution
+- filter must have odd size lengths (ex. 3x3, 5x5, etc) so that it has a centre
+
+
+**pooling:** compressing image
+- ex. go over image with a 2x2 grid and take the highest value at each point
+- preserves features highlighted by convolutions
+
+- need to reshape data for 1st convolution layer by combining multiple 3D arrays into a single 4D array
+  - call `.reshape(NUM_Images, width, length, 1)` method
+
+Note: If weights in filter don't sum to 0 or 1, should normalize them to get a sum of 1
+- or else result will have diff brightness than original
+
+sums:
+1. if sum > 1   => brighter image
+2. if sum == 1  => same brightness
+3. if sum < 1   => darker image
+4. if sum == 0  => very dark image
+
+- for passing filters on image boundaries, can either crop, use values of zero, or wrap to other side (using modulo)
+- usually force pixel values to be in [0,255]
+  - can truncate or take absolute values
+
 ## Process
 1. load data
 2. Pre-process data
@@ -107,16 +167,22 @@ https://www.tensorflow.org/tutorials/keras/basic_classification
 5. Test w/ testing data  
 
 ## Useful terms/objects in TensorFlow and Keras
+
 **Sequential:** defines a sequence of layers in the neural network
 
 **Flatten:** turns 2D array into 1D array
 
 **Dense:** Adds a layer of connected neurons in Keras
 
+**Conv2D:** 2D convolution layer (spatial convolution)
+
+**MaxPooling2D:** max pooling layer for 2D inputs (ex. images)
+- takes max value using a 2D grid
+
 ## Activation functions:
 
 **Relu:** only passes values 0 or greater to the next layer in the network
-- "If X>0 return X, else return 0" -- so what it does it it
+- "If X>0 return X, else return 0"
 - kinda like a diode
 
 **Softmax:** takes an array of values (from prev layer) and replaces the **max elem** with 1 and the rest with 0
@@ -131,6 +197,10 @@ https://www.tensorflow.org/tutorials/keras/basic_classification
 ## Implementation Notes
 - usually use part of dataset for training & rest for testing
 - want to avoid introducing personal bias
+
+- use `model.summary()` to examine layers
+
+**overfitting:** network learns data from training set really well but becomes too specialized to that data and less effective for other data
 
 
 
