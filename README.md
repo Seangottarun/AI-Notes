@@ -12,8 +12,6 @@ TensorFlow: https://www.tensorflow.org/
 
 TensorFlow Playground: http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2&seed=0.72727&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=false&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false
 
-Convolution Filters: https://lodev.org/cgtutor/filtering.html
-
 ## Neural Networks
 intuition: make multiple guesses, which gradually approaches 100% accuracy (convergence)
 
@@ -156,6 +154,12 @@ sums:
 - usually force pixel values to be in [0,255]
   - can truncate or take absolute values
 
+## ImageGenerator
+- automatically generates labels for file containing sub directories
+- subdirectory names are the labels
+
+
+
 ## Process
 1. load data
 2. Pre-process data
@@ -185,9 +189,16 @@ sums:
 - "If X>0 return X, else return 0"
 - kinda like a diode
 
+**Sigmoid:** logistic function that outputs a vector in range (0,1)
+
 **Softmax:** takes an array of values (from prev layer) and replaces the **max elem** with 1 and the rest with 0
 - ex [0.1, 0.1, 0.05, 0.1, 9.5, 0.1, 0.05, 0.05, 0.05] => [0,0,0,0,1,0,0,0,0]
 
+## Losses
+
+**Cross-Entropy loss:** log loss
+
+**Categorical Cross-Entropy loss:** Softmax activation +  Cross-Entropy loss
 
 ## Google Colab
 - `shift enter`: runs code
@@ -206,3 +217,7 @@ sums:
 
 ## Future courses?
 1. https://www.deeplearning.ai/ai-for-everyone/
+
+## Good readings
+1. Convolution Filters: https://lodev.org/cgtutor/filtering.html
+2. Cross_entropy loss: https://gombru.github.io/2018/05/23/cross_entropy_loss/
